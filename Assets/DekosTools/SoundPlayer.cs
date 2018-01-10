@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-//Sound Player V2.0.0_1
+//Sound Player V2.1.0
 
 using System.Collections;
 using System.Collections.Generic;
@@ -53,12 +53,26 @@ namespace DekosTools.Audio
         List<AudioSource> BackgroundMusicCurrentPlaying;
         Dictionary<string, float> BackgroundMusicVolume;
 
-        static bool mute = false;
         public bool Mute
         {
             get
             {
-                return mute;
+                return (MuteSFX || muteBGM);
+            }
+
+            set
+            {
+                MuteSFX = value;
+                muteBGM = value;
+            }
+        }
+
+        static bool muteSFX = false;
+        public bool MuteSFX
+        {
+            get
+            {
+                return muteSFX;
             }
 
             set
@@ -66,7 +80,6 @@ namespace DekosTools.Audio
                 if (value)
                 {
                     SoundEffectCurrentPlaying.ForEach((i) => i.volume = 0);
-                    BackgroundMusicCurrentPlaying.ForEach((i) => i.volume = 0);
                 }
                 else
                 {
@@ -76,6 +89,27 @@ namespace DekosTools.Audio
                         SoundEffectVolume.TryGetValue(i.clip.name, out Vol);
                         i.volume = Vol;
                     });
+                }
+                muteSFX = value;
+            }
+        }
+
+        static bool muteBGM = false;
+        public bool MuteBGM
+        {
+            get
+            {
+                return muteBGM;
+            }
+
+            set
+            {
+                if (value)
+                {
+                    BackgroundMusicCurrentPlaying.ForEach((i) => i.volume = 0);
+                }
+                else
+                {
                     BackgroundMusicCurrentPlaying.ForEach((i) =>
                     {
                         float Vol = 0;
@@ -83,7 +117,7 @@ namespace DekosTools.Audio
                         i.volume = Vol;
                     });
                 }
-                mute = value;
+                muteBGM = value;
             }
         }
 
@@ -133,7 +167,7 @@ namespace DekosTools.Audio
             AudioSource Source = OnTheObject.AddComponent<AudioSource>();
             Source.clip = SoundEffects[ID];
             Source.spatialBlend = spatialBlend;
-            Source.volume = mute ? 0 : volume;
+            Source.volume = muteSFX ? 0 : volume;
             Source.pitch = pitch;
             Source.bypassEffects = bypassEffects;
             Source.bypassListenerEffects = bypassListenerEffects;
@@ -221,7 +255,7 @@ namespace DekosTools.Audio
             AudioSource Source = OnTheObject.AddComponent<AudioSource>();
             Source.clip = BackgroundMusic[ID];
             Source.spatialBlend = spatialBlend;
-            Source.volume = mute ? 0 : volume;
+            Source.volume = muteBGM ? 0 : volume;
             Source.pitch = pitch;
             Source.bypassEffects = bypassEffects;
             Source.bypassListenerEffects = bypassListenerEffects;
