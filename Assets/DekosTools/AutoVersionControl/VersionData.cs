@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DekosTools.VersionControl
+namespace Dekos.AutoVersionControler
 {
     public static class VersionData
     {
