@@ -1,19 +1,47 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace DekosTools.Language
+namespace DekosTools.LanguageTranslate
 {
 
     [System.Serializable]
     public class LanguageDictionary
     {
         [SerializeField]
-        public Dictionary<SystemLanguage, Dictionary<string, string>> Texts;
+        public SystemLanguage defaultLanguage = SystemLanguage.English;
         [SerializeField]
-        public Dictionary<SystemLanguage, Dictionary<string, Sprite>> Sprite;
+        public LanguageDictionaryContent[] languageContent;
+
+        public LanguageDictionary(){
+            languageContent = new LanguageDictionaryContent[43];
+        }
+
+    }
+
+    [System.Serializable]
+    public class LanguageDictionaryContent
+    {
         [SerializeField]
-        public Dictionary<SystemLanguage, Dictionary<string, Texture>> Texture;
+        public bool Enable = false;
         [SerializeField]
-        public Dictionary<SystemLanguage, Dictionary<string, AudioClip>> Audio;
+        public List<LanguageDictionaryEntity> Entitys;
+
+        public LanguageDictionaryContent() {
+            Entitys = new List<LanguageDictionaryEntity>();
+        }
+    }
+
+    [System.Serializable]
+    public class LanguageDictionaryEntity
+    {
+        [SerializeField]
+        public string Key = "";
+        [SerializeField]
+        public string Text = "";
+
+        public LanguageDictionaryEntity(string key,string text){
+            Key = key;
+            Text = text;
+        }
     }
 }
